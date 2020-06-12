@@ -10,9 +10,9 @@ targets:
 
 dependencies:
   proton:
-    # github: protoncr/proton
-    # branch: master
-    path: ../proton
+    github: protoncr/proton
+    branch: master
+    # path: ../proton
   totem:
     github: icyleaf/totem
   spamwatch:
