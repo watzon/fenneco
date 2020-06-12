@@ -4,6 +4,13 @@ class Fennec < Proton::Client
   class_getter! icr_command_stack : Icr::CommandStack?
   class_getter! icr_executor : Icr::Executer?
 
+  @[Help(
+    description: "Compile the given text as Crystal code using ICR. Maintains a code history.",
+    args: {
+      reset: "reset the code history and start over",
+    },
+    usage: ".eval [args] <code>"
+  )]
   @[Command(".eval")]
   def eval_command(ctx)
     msg = ctx.message

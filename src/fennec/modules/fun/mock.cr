@@ -1,4 +1,8 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "be SArCAStiC aF, or Not",
+    usage: ".mock <text>"
+  )]
   @[Command(".mock", edited: true)]
   def mock_command(ctx)
     if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text

@@ -1,6 +1,10 @@
 require "http/client"
 
 class Fennec < Proton::Client
+  @[Help(
+    description: "Follow the given url(s) to their destination",
+    usage: ".f(ollow) <...urls>"
+  )]
   @[Command([".f", ".follow"])]
   def follow_command(ctx)
     msg = ctx.message.reply_to_message || ctx.message

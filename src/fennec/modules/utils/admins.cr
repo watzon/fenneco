@@ -1,4 +1,11 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "List the admins for the current chat.",
+    args: {
+      mention: "mention the admins. sends a new message rather than editing."
+    },
+    usage: ".admins [args]"
+  )]
   @[Command(".admins", edit: true)]
   def admins_command(ctx)
     args, _ = Utils.parse_args(ctx.text)

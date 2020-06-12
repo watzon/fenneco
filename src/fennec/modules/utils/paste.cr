@@ -1,6 +1,13 @@
 require "uri"
 
 class Fennec < Proton::Client
+  @[Help(
+    description: "Add the message text or the replied to text to a pase bin using del.dog.",
+    args: {
+      ext: "the file extension to use",
+    },
+    usage: ".paste [args] [content]"
+  )]
   @[Command(".paste")]
   def paste_command(ctx)
     msg = ctx.message

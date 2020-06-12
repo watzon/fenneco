@@ -1,4 +1,8 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "Ping the server and see how long it takes",
+    usage: ".ping"
+  )]
   @[Command(".ping", edit: true)]
   def ping_command(ctx)
     elapsed = Time.measure do

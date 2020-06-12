@@ -4,6 +4,10 @@ class Fennec < Proton::Client
     "💥", "🍴", "💦", "💦", "🍑", "🍆", "😩", "😏", "👉👌", "👀", "👅", "😩", "🚰"
   ]
 
+  @[Help(
+    description: "😩memify😩THe👐GIVen🚰🅱️ext😩",
+    usage: ".cp <text>"
+  )]
   @[Command(".cp", edited: true)]
   def copypasta_command(ctx)
     if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text

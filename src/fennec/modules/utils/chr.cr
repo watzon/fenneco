@@ -1,4 +1,8 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "List the codepoints for the message's characters.",
+    usage: ".chr <text>"
+  )]
   @[Command(".chr", edited: true)]
   def codepoint_command(ctx)
     text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text

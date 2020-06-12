@@ -1,5 +1,13 @@
 class Fennec < Proton::Client
-  @[Command([".cleanup", ".cleanchat"])]
+  @[Help(
+    description: "Clean the chat of deleted members",
+    args: {
+      count: "count deleted accounts rather than removing them (`true` by default if not admin)",
+      silent: "don't send updates to the chat"
+    },
+    usage: ".clean(up) [args]"
+  )]
+  @[Command(/\.clean(up)?/)]
   def cleanup_command(ctx)
     msg = ctx.message
     chat = TL.get_chat(msg.chat_id)

@@ -1,4 +1,8 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "Dump the JSON of the replied to message",
+    usage: ".info"
+  )]
   @[Command(".info")]
   def message_info_command(ctx)
     message = ctx.message.reply_to_message_id > 0 ?

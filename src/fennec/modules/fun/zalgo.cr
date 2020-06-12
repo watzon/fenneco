@@ -5,6 +5,10 @@ class Fennec < Proton::Client
     [" ̕", " ̛", " ̀", " ́", " ͘", " ̡", " ̢", " ̧", " ̨", " ̴", " ̵", " ̶", " ͜", " ͝", " ͞", " ͟", " ͠", " ͢", " ̸", " ̷", " ͡"],
   ]
 
+  @[Help(
+    description: "Z͈̓a͖̹l̲̼g̵̠ä̵́f̵̄í̻e̸̞s̝͝ t̵͡h̶̫e͉͜ g͒ͧi̵͟v͈́e̷̙n̡͝ t̸ͧę͘x̫ͮt͎ͨ",
+    usage: ".zal(go) <text>"
+  )]
   @[Command([".zal", ".zalgo"])]
   def zalgo_command(ctx)
     if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text

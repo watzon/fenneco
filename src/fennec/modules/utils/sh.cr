@@ -1,4 +1,8 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "Run a shell command on the local system",
+    usage: ".sh [command]"
+  )]
   @[Command([".sh", ".shell"], edited: true)]
   def shell_command(ctx)
     edit_message(ctx.message, "`Running command: #{ctx.text}`")

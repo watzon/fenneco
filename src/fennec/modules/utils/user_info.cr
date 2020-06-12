@@ -1,4 +1,16 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "Display information about a user",
+    args: {
+      id: "display only the name and id",
+      general: "display general info (default: `true`)",
+      bot: "display bot information",
+      misc: "display miscellanious information",
+      spam: "use the SpamWatch API to fetch ban information",
+      all: "set all of the above to `true`"
+    },
+    usage: ".u(ser) [args] [...users]"
+  )]
   @[Command([".u", ".user"])]
   def user_info_command(ctx)
     msg = ctx.message

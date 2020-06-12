@@ -3,6 +3,7 @@ require "proton"
 
 require "./fennec/config/*"
 require "./fennec/utils"
+require "./fennec/help"
 require "./fennec/modules/**"
 
 class Fennec < Proton::Client
@@ -27,6 +28,8 @@ class Fennec < Proton::Client
   class_getter config : Totem::Config { Totem.new("config") }
 
   getter me : TL::User { TL.get_me }
+
+  getter module_help : ModuleHelp
 
   def initialize(auth_flow : Proton::AuthFlow)
     Fennec.config.config_paths << "."
@@ -64,6 +67,8 @@ class Fennec < Proton::Client
       enable_storage_optimizer: Fennec.config.get("enable_storage_optimizer").as_bool,
       ignore_file_names: Fennec.config.get("ignore_file_names").as_bool
     )
+
+    @module_help = ModuleHelp.from_annotations
   end
 
   @[Command(".status", edited: true )]
@@ -73,7 +78,7 @@ class Fennec < Proton::Client
 
   # @[OnMessage(edited: true)]
   # def on_new_message(ctx)
-  #   if (text = ctx.raw_text) && !text.empty?
+  #   if (text = ctx.raw_text) && !text.strip.empty?
   #     puts
   #     puts "---------------------------------"
   #     puts ctx.edited ? "Edited:" : ""

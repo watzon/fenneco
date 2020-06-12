@@ -1,4 +1,8 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "Delete messages, either using a reference message or a number.",
+    usage: ".purge [count | reply message]"
+  )]
   @[Command(".purge")]
   def purge_command(ctx)
     msg = ctx.message

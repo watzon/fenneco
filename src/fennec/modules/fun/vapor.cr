@@ -1,4 +1,8 @@
 class Fennec < Proton::Client
+  @[Help(
+    description: "Ｅｍｐｈａｓｉｚｅ ｔｅｘｔ ｉｎ ａ ｆｕｎ ｗａｙ",
+    usage: ".vapor <text>"
+  )]
   @[Command(".vapor")]
   def vaporwave_command(ctx)
     if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text
