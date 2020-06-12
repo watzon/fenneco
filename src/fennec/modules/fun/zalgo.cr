@@ -1,0 +1,28 @@
+class Fennec < Proton::Client
+  ZALG_LIST = [
+    ["̖", " ̗", " ̘", " ̙", " ̜", " ̝", " ̞", " ̟", " ̠", " ̤", " ̥", " ̦", " ̩", " ̪", " ̫", " ̬", " ̭", " ̮", " ̯", " ̰", " ̱", " ̲", " ̳", " ̹", " ̺", " ̻", " ̼", " ͅ", " ͇", " ͈", " ͉", " ͍", " ͎", " ͓", " ͔", " ͕", " ͖", " ͙", " ͚", " "],
+    [" ̍", " ̎", " ̄", " ̅", " ̿", " ̑", " ̆", " ̐", " ͒", " ͗", " ͑", " ̇", " ̈", " ̊", " ͂", " ̓", " ̈́", " ͊", " ͋", " ͌", " ̃", " ̂", " ̌", " ͐", " ́", " ̋", " ̏", " ̽", " ̉", " ͣ", " ͤ", " ͥ", " ͦ", " ͧ", " ͨ", " ͩ", " ͪ", " ͫ", " ͬ", " ͭ", " ͮ", " ͯ", " ̾", " ͛", " ͆", " ̚"],
+    [" ̕", " ̛", " ̀", " ́", " ͘", " ̡", " ̢", " ̧", " ̨", " ̴", " ̵", " ̶", " ͜", " ͝", " ͞", " ͟", " ͠", " ͢", " ̸", " ̷", " ͡"],
+  ]
+
+  @[Command([".zal", ".zalgo"])]
+  def zalgo_command(ctx)
+    if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text
+      reply = String.build do |str|
+        text.chars.each do |chr|
+          if chr.ascii_letter?
+            str << chr
+            (0..3).each do |i|
+              randint = rand(0..2)
+              str << ZALG_LIST[randint].sample(1)[0].strip
+            end
+          else
+            str << chr
+          end
+        end
+      end
+
+      edit_message(ctx.message, reply)
+    end
+  end
+end

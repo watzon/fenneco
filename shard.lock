@@ -1,0 +1,30 @@
+version: 2.0
+shards:
+  magic:
+    git: https://github.com/dscottboggs/magic.cr.git
+    version: 1.1.0+git.commit.bfa4998d957695b626d4f65475de910d9f18a66d
+
+  markd:
+    git: https://github.com/icyleaf/markd.git
+    version: 0.2.0
+
+  popcorn:
+    git: https://github.com/icyleaf/popcorn.git
+    version: 0.2.2
+
+  proton:
+    path: ../proton
+    version: 0.1.0
+
+  spamwatch:
+    git: https://github.com/spamwatch/spamwatch-cr.git
+    version: 0.1.0+git.commit.9f66aa4081a953cfb421622d28b83b194d03e050
+
+  tl_parser:
+    git: https://github.com/protoncr/tl_parser.git
+    version: 0.1.0+git.commit.113af1dd081a82cff54abbbee7b6d0b66c5b159f
+
+  totem:
+    git: https://github.com/icyleaf/totem.git
+    version: 0.6.1
+
