@@ -18,6 +18,9 @@ dependencies:
   spamwatch:
     github: spamwatch/spamwatch-cr
     branch: master
+  icr:
+    github: crystal-community/icr
+    branch: master
 
 crystal: 0.35.0
 

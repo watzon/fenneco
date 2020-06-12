@@ -1,5 +1,9 @@
 version: 2.0
 shards:
+  icr:
+    git: https://github.com/crystal-community/icr.git
+    version: 0.7.0+git.commit.7da354f5c0a356aee77e68fc63c87e2ad35da7fb
+
   magic:
     git: https://github.com/dscottboggs/magic.cr.git
     version: 1.1.0+git.commit.bfa4998d957695b626d4f65475de910d9f18a66d
@@ -15,6 +19,10 @@ shards:
   proton:
     path: ../proton
     version: 0.1.0
+
+  readline:
+    git: https://github.com/crystal-lang/crystal-readline.git
+    version: 0.1.0+git.commit.0fb7d186da8e1b157998d98d1c96e99699b791eb
 
   spamwatch:
     git: https://github.com/spamwatch/spamwatch-cr.git
