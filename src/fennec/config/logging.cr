@@ -3,3 +3,5 @@ Log.setup do |c|
 
   c.bind "proton.*", :info, backend
 end
+
+# Crecto::DbLogger.set_handler(STDOUT)

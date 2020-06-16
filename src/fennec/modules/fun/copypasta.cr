@@ -10,7 +10,7 @@ class Fennec < Proton::Client
   )]
   @[Command(".cp", edited: true)]
   def copypasta_command(ctx)
-    if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text
+    if text = (msg = ctx.message.reply_message) ? msg.text : ctx.text
       chars = text.chars
       random = Random.new
 

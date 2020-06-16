@@ -10,12 +10,12 @@ class Fennec < Proton::Client
   @[Command(/\.clean(up)?/)]
   def cleanup_command(ctx)
     msg = ctx.message
-    chat = TL.get_chat(msg.chat_id)
-    chat_member = TL.get_chat_member(chat.id, me.id)
-    args, _ = Utils.parse_args(ctx.text)
+    chat = TL.get_chat(msg.chat_id!)
+    chat_member = TL.get_chat_member(chat.id!, me.id!)
+    args, _ = ArgParser({count: Bool, silent: Bool}).parse(ctx.text)
 
-    count_only = args.fetch("count", false)
-    silent = args.fetch("silent", false)
+    count_only = args.fetch(:count, false)
+    silent = args.fetch(:silent, false)
 
     unless chat_member.creator? || chat_member.administrator?
       count_only = true
@@ -39,24 +39,24 @@ class Fennec < Proton::Client
     deleted_users = 0
     user_counter = 0
 
-    supergroup_id = chat.type.as(TL::ChatTypeSupergroup).supergroup_id
+    supergroup_id = chat.type.as(TL::ChatTypeSupergroup).supergroup_id!
     supergroup = TL.get_supergroup(supergroup_id)
 
     banned_status = TL::ChatMemberStatusBanned.new(0)
     deleted_accounts_label = Utils::MarkdownBuilder::Bold.new("#{count ? "Counted" : "Removed"} Deleted Accounts")
-    participant_count = supergroup.member_count
+    participant_count = supergroup.member_count!
 
     loop do
       response = TL.get_supergroup_members(supergroup_id, TL::SupergroupMembersFilterRecent.new, user_counter, 100)
-      members = response.members
+      members = response.members!.compact
       break if members.empty?
       user_counter += members.size
 
       members.each do |member|
         spawn do
-          if user = TL.get_user(member.not_nil!.user_id)
+          if user = TL.get_user(member.user_id!)
             if user.deleted?
-              TL.set_chat_member_status(msg.not_nil!.chat_id, user.not_nil!.id, banned_status.not_nil!) unless count
+              TL.set_chat_member_status(msg.not_nil!.chat_id!, user.id!, banned_status.not_nil!) unless count
               deleted_users += 1
             end
           end

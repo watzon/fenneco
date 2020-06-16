@@ -5,7 +5,7 @@ class Fennec < Proton::Client
   )]
   @[Command(".chr", edited: true)]
   def codepoint_command(ctx)
-    text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text
+    text = (msg = ctx.message.reply_message) ? msg.text : ctx.text
     if text
       output = String.build do |str|
         text.chars.uniq.each do |chr|

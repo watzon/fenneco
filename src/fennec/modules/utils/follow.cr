@@ -7,7 +7,7 @@ class Fennec < Proton::Client
   )]
   @[Command([".f", ".follow"])]
   def follow_command(ctx)
-    msg = ctx.message.reply_to_message || ctx.message
+    msg = ctx.message.reply_message || ctx.message
     urls = msg.text_entities
       .select { |k, _| k.type.is_a?(TL::TextEntityTypeUrl) }
       .map { |_, v| v }

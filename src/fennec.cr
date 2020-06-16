@@ -1,93 +1,49 @@
-require "totem"
+require "dotenv"
 require "proton"
+require "humanize_time"
 
+Dotenv.load?
+
+require "./fennec/version"
 require "./fennec/config/*"
 require "./fennec/utils"
 require "./fennec/help"
+require "./fennec/models/*"
+require "./fennec/arg_parser"
 require "./fennec/modules/**"
 
 class Fennec < Proton::Client
-  CONFIG_DEFAULTS = {
-    "use_test_dc" => false,
-    "database_directory" => Path.home.join(".config/fennec/tdlib").to_s,
-    "files_directory" => "",
-    "use_file_database" => true,
-    "use_chat_info_database" => true,
-    "use_message_database" => true,
-    "use_secret_chats" => false,
-    "system_language_code" => "en",
-    "device_model" => "Desktop",
-    "system_version" => "Linux",
-    "application_version" => Fennec::VERSION,
-    "enable_storage_optimizer" => true,
-    "ignore_file_names" => false,
-    "verbosity_level" => 1,
-    "request_timeout" => 30
-  }
-
-  class_getter config : Totem::Config { Totem.new("config") }
-
   getter me : TL::User { TL.get_me }
 
   getter module_help : ModuleHelp
 
+  class_getter! client : Fennec
+
   def initialize(auth_flow : Proton::AuthFlow)
-    Fennec.config.config_paths << "."
-    Fennec.config.config_paths << Path.home.join(".Fennec").to_s
-    Fennec.config.config_paths << Path.home.join(".config/Fennec/").to_s
-    Fennec.config.set_defaults(CONFIG_DEFAULTS)
-    Fennec.config.automatic_env(prefix: "Fennec")
-
-    begin
-      Fennec.config.load!
-    rescue ex
-      Log.fatal(exception: ex) { "Failed to load config file" }
-      exit(1)
-    end
-
-    pp! Fennec.config.get("database_directory").as_s
-
     super(
       auth_flow: auth_flow,
-      api_id: Fennec.config.get("api_id").as_i,
-      api_hash: Fennec.config.get("api_hash").as_s,
-      verbosity_level: Fennec.config.get("verbosity_level").as_i,
-      timeout: Fennec.config.get("request_timeout").as_i.seconds,
-      use_test_dc: Fennec.config.get("use_test_dc").as_bool,
-      database_directory: Fennec.config.get("database_directory").as_s,
-      files_directory: Fennec.config.get("files_directory").as_s,
-      use_file_database: Fennec.config.get("use_file_database").as_bool,
-      use_chat_info_database: Fennec.config.get("use_chat_info_database").as_bool,
-      use_message_database: Fennec.config.get("use_message_database").as_bool,
-      use_secret_chats: Fennec.config.get("use_secret_chats").as_bool,
-      system_language_code: Fennec.config.get("system_language_code").as_s,
-      device_model: Fennec.config.get("device_model").as_s,
-      system_version: Fennec.config.get("system_version").as_s,
-      application_version: Fennec.config.get("application_version").as_s,
-      enable_storage_optimizer: Fennec.config.get("enable_storage_optimizer").as_bool,
-      ignore_file_names: Fennec.config.get("ignore_file_names").as_bool
+      api_id: ENV.fetch("API_ID").to_i,
+      api_hash: ENV.fetch("API_HASH"),
+      verbosity_level: ENV.fetch("VERBOSITY_LEVEL", "1").to_i,
+      timeout: ENV.fetch("REQUEST_TIMEOUT", "3600").to_i.seconds,
+      use_test_dc: !!ENV.fetch("USE_TEST_DC", "false").match(/1|t(rue)?/i),
+      database_directory: ENV.fetch("DATABASE_DIRECTORY", Path.home.join(".config/fennec/tdlib").to_s),
+      files_directory: ENV.fetch("FILES_DIRECTORY", ""),
+      use_file_database: !!ENV.fetch("USE_FILE_DATABASE", "true").match(/1|t(rue)?/i),
+      use_chat_info_database: !!ENV.fetch("USE_CHAT_INFO_DATABASE", "true").match(/1|t(rue)?/i),
+      use_message_database: !!ENV.fetch("USE_MESSAGE_DATABASE", "true").match(/1|t(rue)?/i),
+      use_secret_chats: !!ENV.fetch("USE_SECRET_CHATS", "true").match(/1|t(rue)?/i),
+      system_language_code: ENV.fetch("SYSTEM_LANGUAGE_CODE", "en"),
+      device_model: ENV.fetch("DEVICE_MODEL", "Desktop"),
+      system_version: ENV.fetch("SYSTEM_VERSION", "Linux"),
+      application_version: ENV.fetch("APPLICATION_VERSION", Fennec::VERSION),
+      enable_storage_optimizer: !!ENV.fetch("ENABLE_STORAGE_OPTIMIZER", "true").match(/1|t(rue)?/i),
+      ignore_file_names: !!ENV.fetch("IGNORE_FILE_NAMES", "false").match(/1|t(rue)?/i)
     )
 
     @module_help = ModuleHelp.from_annotations
+    @@client = self
   end
-
-  @[Command(".status", edited: true )]
-  def status_command(ctx)
-    edit_message(ctx.message, "`Firing on all cylinders!`")
-  end
-
-  # @[OnMessage(edited: true)]
-  # def on_new_message(ctx)
-  #   if (text = ctx.raw_text) && !text.strip.empty?
-  #     puts
-  #     puts "---------------------------------"
-  #     puts ctx.edited ? "Edited:" : ""
-  #     puts text
-  #     puts
-  #     puts "---------------------------------"
-  #     puts
-  #   end
-  # end
 end
 
 client = Fennec.new(Proton::TerminalAuthFlow.new(encryption_key: ""))

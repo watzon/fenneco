@@ -1,0 +1,13 @@
+#! /usr/bin/env crystal
+#
+# To build a standalone command line client, require the
+# driver you wish to use and use `Micrate::Cli`.
+#
+require "dotenv"
+Dotenv.load?
+
+require "micrate"
+require "pg"
+
+Micrate::DB.connection_url = ENV["DB_URI"]
+Micrate::Cli.run

@@ -5,7 +5,7 @@ class Fennec < Proton::Client
   )]
   @[Command(".vapor")]
   def vaporwave_command(ctx)
-    if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text
+    if text = (msg = ctx.message.reply_message) ? msg.text : ctx.text
       reply = String.build do |str|
         text.chars.each do |chr|
           if (0x21..0x7F).includes?(chr.ord)

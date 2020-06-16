@@ -7,16 +7,28 @@ class Fennec < Proton::Client
       bot: "display bot information",
       misc: "display miscellanious information",
       spam: "use the SpamWatch API to fetch ban information",
-      all: "set all of the above to `true`"
+      common: "display all groups shared with the user",
+      all: "set all of the above to `true`",
+      forward: "follow the forwarded message (default: `true`)"
     },
     usage: ".u(ser) [args] [...users]"
   )]
   @[Command([".u", ".user"])]
   def user_info_command(ctx)
     msg = ctx.message
-    args, text = Utils.parse_args(ctx.text)
-    ents = text.to_s.split(/\s+/).reject(&.empty?)
 
+    args, text = ArgParser({
+      forward: Bool,
+      id: Bool,
+      general: Bool,
+      bot: Bool,
+      misc: Bool,
+      common: Bool,
+      spam: Bool,
+      all: Bool
+    }).parse(ctx.text, {general: true, forward: true})
+
+    ents = text.to_s.split(/\s+/).reject(&.empty?)
     spawn edit_message(msg, "`Please wait... Resolving entities.`")
 
     if ents.empty? && msg.reply?
@@ -33,67 +45,34 @@ class Fennec < Proton::Client
   end
 
   private def info_from_arguments(msg, ents, args)
-    text_entities = msg.text_entities.keys.map(&.type).select(&.is_a?(TL::TextEntityTypeMentionName))
-    uids = text_entities.map(&.as(TL::TextEntityTypeMentionName).user_id)
-
-    # Map over the given entities. They could be ids, usernames, or garbage text.
-    # We need to resolve them if possible and add them to an array.
-    users = (ents + uids).reduce([] of TL::User) do |acc, ent|
-      begin
-        case ent
-        when Int, .to_i32?
-          user = TL.get_user(ent.to_i32)
-          acc << user if user
-        when /^@[\w\d_]{4,}/i
-          if chat = TL.search_public_chat(ent.lstrip('@'))
-            user = TL.get_user(chat.id.to_i32)
-            acc << user if user
-          end
-        end
-      rescue ex
-      end
-      acc
-    end
-
+    users = Utils.users_from_entities(msg, ents)
     return if users.empty?
-
     users.map do |usr|
       collect_user_info(usr, args).to_s
     end.join("\n")
   end
 
   def info_from_reply(msg, args)
-    reply_id = msg.reply_to_message_id
-    forawrd = args.fetch("forward", true)
-    reply_message = TL.get_message(msg.chat_id, reply_id)
-
-    if forawrd && reply_message.forwarded? && (fw_info = reply_message.forward_info)
-      origin = fw_info.origin
-      if origin.is_a?(TL::MessageForwardOriginUser)
-        user_id = origin.sender_user_id
-        user = TL.get_user(user_id)
-      end
-    elsif reply_message.sender_user_id > 0
-      user = TL.get_user(reply_message.sender_user_id)
+    forward = args[:forward]
+    if user = Utils.user_from_message(msg, forward)
+      collect_user_info(user, args)
     end
-
-    return unless user
-
-    collect_user_info(user, args)
   end
 
   def collect_user_info(user, args)
-    id_only = args.fetch("id", false)
-    show_general = args.fetch("general", true)
-    show_bot = args.fetch("bot", false)
-    show_misc = args.fetch("misc", false)
-    show_spam = args.fetch("spam", false)
-    show_all = args.fetch("all", false)
+    id_only = args[:id]
+    show_general = args[:general]
+    show_bot = args[:bot]
+    show_misc = args[:misc]
+    show_common = args[:common]
+    show_spam = args[:spam]
+    show_all = args[:all]
 
     if show_all
       show_general = true
       show_bot = true
       show_misc = true
+      show_common = true
       show_spam = true
     end
 
@@ -110,13 +89,15 @@ class Fennec < Proton::Client
       section do
         mention(Utils.escape_md(user.display_name), user)
         if show_general
+          gban_status = Repo.get_by(Models::Gban, user_id: user.id!)
+
           sub_section do
             bold("general")
             key_value_item("id", code(user.id))
             key_value_item("first name", code(user.first_name))
             key_value_item("last name", code(user.last_name))
             key_value_item("username", code(user.username))
-            key_value_item("mutual contact", code(user.is_contact))
+            key_value_item("gbanned", code(!!gban_status))
           end
         end
 
@@ -146,13 +127,29 @@ class Fennec < Proton::Client
         if show_misc
           sub_section do
             bold("misc")
-            key_value_item("restricted", code(!user.restriction_reason.empty?))
+            key_value_item("restricted", code(!user.restriction_reason!.empty?))
             key_value_item("restriction reason", code(user.restriction_reason))
             key_value_item("deleted", code(user.type.is_a?(TL::UserTypeDeleted)))
             key_value_item("verified", code(user.is_verified))
             key_value_item("support", code(user.is_support))
             key_value_item("scam", code(user.is_scam))
             key_value_item("language code", code(user.language_code))
+          end
+        end
+
+        if show_common
+          common_groups = TL.get_groups_in_common(user.id!, 0, 100)
+          sub_section do
+            bold("common groups")
+            if (chat_ids = common_groups.chat_ids!) && !chat_ids.empty?
+              chat_ids.each do |id|
+                if (chat = TL.get_chat(id)) && (sg = chat.supergroup)
+                  text(sg.username!.empty? ? "`#{chat.title}`" : "@#{sg.username}")
+                end
+              end
+            else
+              text("No common groups")
+            end
           end
         end
 

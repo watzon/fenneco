@@ -10,16 +10,29 @@ targets:
 
 dependencies:
   proton:
-    github: protoncr/proton
-    branch: master
-    # path: ../proton
-  totem:
-    github: icyleaf/totem
+    # github: protoncr/proton
+    # branch: master
+    path: ../proton
+  dotenv:
+    github: gdotdesign/cr-dotenv
+    version: ~> 0.7.0
   spamwatch:
     github: spamwatch/spamwatch-cr
     branch: master
   icr:
     github: crystal-community/icr
+    branch: master
+  humanize_time:
+    github: mamantoha/humanize_time
+
+  pg:
+    github: will/crystal-pg
+    version: "~> 0.21.0"
+  crecto:    
+    github: watzon/crecto
+    branch: master
+  micrate:
+    github: juanedi/micrate
     branch: master
 
 crystal: 0.35.0

@@ -23,7 +23,7 @@ class Fennec < Proton::Client
           {% for ann in method.annotations(Help) %}
             {% filedir = ann.filename.stringify.split('/')[-2] %}
             %category = {{ ann[:category] || filedir }}
-            %name = {{ ann[:name] || method.name.stringify.gsub(/_command$/, "").gsub(/_/, " ") }}
+            %name = {{ ann[:name] || method.name.stringify.gsub(/_(command|listener)$/, "").gsub(/_/, " ") }}
             %description = {{ ann[:desc] || ann[:description] || "no description provided" }}
             %usage = {{ ann[:usage] }}
 

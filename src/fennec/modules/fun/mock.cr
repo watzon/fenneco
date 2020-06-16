@@ -5,7 +5,7 @@ class Fennec < Proton::Client
   )]
   @[Command(".mock", edited: true)]
   def mock_command(ctx)
-    if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text
+    if text = (msg = ctx.message.reply_message) ? msg.text : ctx.text
       random = Random.new
       chars = text.chars.map do |chr|
         if chr.ascii_letter? && random.next_bool

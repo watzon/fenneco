@@ -1,5 +1,29 @@
 version: 2.0
 shards:
+  crecto:
+    git: https://github.com/watzon/crecto.git
+    version: 0.11.2+git.commit.fa7658c2921b48073c9225ec6d6abca2b2edb89d
+
+  db:
+    git: https://github.com/crystal-lang/crystal-db.git
+    version: 0.9.0
+
+  dotenv:
+    git: https://github.com/gdotdesign/cr-dotenv.git
+    version: 0.7.0
+
+  humanize_time:
+    git: https://github.com/mamantoha/humanize_time.git
+    version: 0.6.0
+
+  i18n:
+    git: https://github.com/TechMagister/i18n.cr.git
+    version: 0.3.1
+
+  i18n_plural_rules:
+    git: https://github.com/mamantoha/i18n_plural_rules.git
+    version: 0.1.1
+
   icr:
     git: https://github.com/crystal-community/icr.git
     version: 0.7.0+git.commit.7da354f5c0a356aee77e68fc63c87e2ad35da7fb
@@ -12,9 +36,13 @@ shards:
     git: https://github.com/icyleaf/markd.git
     version: 0.2.0
 
-  popcorn:
-    git: https://github.com/icyleaf/popcorn.git
-    version: 0.2.2
+  micrate:
+    git: https://github.com/juanedi/micrate.git
+    version: 0.8.0+git.commit.3deb8eb10551d1cbc6b7808b6f57c289fb9380f6
+
+  pg:
+    git: https://github.com/will/crystal-pg.git
+    version: 0.21.1
 
   proton:
     path: ../proton
@@ -31,8 +59,4 @@ shards:
   tl_parser:
     git: https://github.com/protoncr/tl_parser.git
     version: 0.1.0+git.commit.113af1dd081a82cff54abbbee7b6d0b66c5b159f
-
-  totem:
-    git: https://github.com/icyleaf/totem.git
-    version: 0.6.1
 

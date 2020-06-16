@@ -14,7 +14,7 @@ class Fennec < Proton::Client
     args, text = Utils.parse_args(ctx.text)
     ext = (args["ext"]? || "txt").to_s.lstrip('.')
 
-    if text.strip.empty? && (reply_message = msg.reply_to_message)
+    if text.strip.empty? && (reply_message = msg.reply_message)
       text = reply_message.text.to_s
     end
 

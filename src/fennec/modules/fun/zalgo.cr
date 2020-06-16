@@ -11,7 +11,7 @@ class Fennec < Proton::Client
   )]
   @[Command([".zal", ".zalgo"])]
   def zalgo_command(ctx)
-    if text = (msg = ctx.message.reply_to_message) ? msg.text : ctx.text
+    if text = (msg = ctx.message.reply_message) ? msg.text : ctx.text
       reply = String.build do |str|
         text.chars.each do |chr|
           if chr.ascii_letter?

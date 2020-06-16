@@ -11,7 +11,7 @@ class Fennec < Proton::Client
     args, _ = Utils.parse_args(ctx.text)
     args["mention"] ||= false
 
-    admins = get_chat_administrators(ctx.message.chat_id)
+    admins = get_chat_administrators(ctx.message.chat_id!)
 
     response = Proton::Utils::MarkdownBuilder.build do |md|
       section do
@@ -23,8 +23,8 @@ class Fennec < Proton::Client
     end
 
     if args["mention"]
-      delete_messages(ctx.message.chat_id, [ctx.message])
-      send_message(ctx.message.chat_id, response.to_s, reply_to_message: ctx.message.reply_to_message_id)
+      delete_messages(ctx.message.chat_id!, [ctx.message])
+      send_message(ctx.message.chat_id!, response.to_s, reply_message: ctx.message.reply_to_message_id!)
     else
       edit_message(ctx.message, response.to_s)
     end
