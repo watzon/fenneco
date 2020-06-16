@@ -37,6 +37,6 @@ class Fennec < Proton::Client
       end
     end
 
-    send_message(msg.chat_id!, response.to_s, file: "assets/fenneco.png")
+    send_message(msg.chat_id!, response.to_s, file: "assets/fenneco.png", reply_message: ctx.message.reply_message)
   end
 end

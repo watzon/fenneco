@@ -187,7 +187,7 @@ class Fennec < Proton::Client
           str.puts "`[contact]`"
         end
 
-        if text = message.text
+        if text = message.raw_text
           str.puts text
         else
           str.puts "`[no text/caption]`"

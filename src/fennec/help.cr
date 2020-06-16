@@ -52,15 +52,14 @@ class Fennec < Proton::Client
     def render_help
       categories = cat_map.keys
       Utils::MarkdownBuilder.build do
-        section do
+        section(indent: 0) do
           bold("Fenneco Help")
           text("Use `.help [module name]` to get help for a specific module")
         end
 
-        text("\n")
-
         categories.each do |cat|
-          section do
+          text("\n")
+          section(indent: 0) do
             bold(cat)
             modules = cat_map[cat]
             if modules.empty?
@@ -77,14 +76,14 @@ class Fennec < Proton::Client
       name = name.to_s.downcase
       if help_item = help_map[name]?
         Utils::MarkdownBuilder.build do
-          section do
+          section(indent: 0) do
             bold(name)
             text(help_item.description)
           end
 
           if arguments = help_item.arguments
             text("\n")
-            section do
+            section(indent: 0) do
               bold("args")
               arguments.each do |name, desc|
                 key_value_item(bold(name), desc)
@@ -94,7 +93,7 @@ class Fennec < Proton::Client
 
           if usage = help_item.usage
             text("\n")
-            section do
+            section(indent: 0) do
               bold("usage")
               code(usage)
             end

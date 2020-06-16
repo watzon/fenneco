@@ -15,9 +15,9 @@ class Fennec < Proton::Client
 
     edit_message(msg, "`Globally banning...`")
 
-    if msg.reply? && (user = Utils.user_from_message(msg))
-      message = Utils.textify_message(msg.reply_message.not_nil!)
-      ban_reason = args.fetch(:reason, text.empty? ? DEFAULT_GBAN_REASON : text).to_s
+    if (reply_message = msg.reply_message) && (user = Utils.user_from_message(msg))
+      message = Utils.textify_message(reply_message)
+      ban_reason = args[:reason] || text.empty? ? DEFAULT_GBAN_REASON : text
       status, _, error = gban_user(user.id!, ban_reason, message)
 
       if status
@@ -32,8 +32,8 @@ class Fennec < Proton::Client
             bold("New Gban")
             key_value_item(bold("User"), "#{user.inline_mention} `(#{user.id!})`")
             key_value_item(bold("Reason"), code(ban_reason))
-            bold("Message")
-            text("----------------------------------")
+            bold("Message:")
+            text("----------------------------------------")
             text(message)
           end
         end
