@@ -5,7 +5,7 @@ class Fennec < Proton::Client
     description: "Sends a 'let me google that for you' message",
     usage: ".lmgtfy <text>"
   )]
-  @[Command(".lmgtfy")]
+  @[Command(/\.l(mgt)?fy/)]
   def lmgtfy_command(ctx)
     msg = ctx.message
     args, text = Utils.parse_args(ctx.text)

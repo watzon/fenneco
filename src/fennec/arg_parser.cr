@@ -1,6 +1,6 @@
 class Fennec < Proton::Client
   class ArgParser(T)
-    alias Value = String | Int64 | Float64 | Bool | Nil
+    alias Value = Array(String) | String | Int64 | Float64 | Bool | Nil
 
     @defaults : Hash(String, Value)
 

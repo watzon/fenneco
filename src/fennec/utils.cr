@@ -3,6 +3,7 @@ require "http/client"
 
 require "string_scanner"
 require "spamwatch"
+require "google"
 
 class Fennec < Proton::Client
   module Utils
@@ -10,9 +11,21 @@ class Fennec < Proton::Client
     include Proton::Utils
 
     COMMAND_ARGS_RE = /\s*(((!|\.)[\w\d_\-]+)|(([\w\d_\-]+):[!\w\d_\-]+))\s*/i
+    INVITE_LINK_RE = /((?:https?:\/\/)?t\.me\/joinchat\/[\w_\-]+)/
+    BOT_TOKEN_RE = /([\d]{6,}:[\w_\-]{35})/
 
-    def log(text, **options)
+    def log(text, *tags, **options)
       if chat_id = ENV["LOG_CHAT_ID"]?
+        if tags.size > 0
+          # Add tags as hashtags to the bottom of the message
+          # if they exist
+          text = String.build do |str|
+            str.puts text
+            str.puts "----------------------------------------"
+            str.puts tags.map { |tag| "##{tag}" }.join(' ')
+          end
+        end
+
         Fennec.client.send_message(chat_id.to_i64, text, **options)
       end
     end
@@ -20,6 +33,13 @@ class Fennec < Proton::Client
     def spamwatch_client
       if token = ENV["SPAMWATCH_TOKEN"]?
         @@client ||= SpamWatch::Client.new(token)
+      end
+    end
+
+    def translator
+      if auth_file = ENV["GOOGLE_AUTH_FILE_PATH"]?
+        @@google_auth ||= Google::FileAuth.new(auth_file, scopes: "https://www.googleapis.com/auth/cloud-translation")
+        @@translator ||= Google::Translate.new(@@google_auth.not_nil!)
       end
     end
 

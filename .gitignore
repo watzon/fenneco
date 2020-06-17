@@ -5,4 +5,5 @@
 *.dwarf
 config.yml
 shard.lock
+/secrets/*
 .env

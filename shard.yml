@@ -24,6 +24,9 @@ dependencies:
     branch: master
   humanize_time:
     github: mamantoha/humanize_time
+  google:
+    github: watzon/google
+    branch: master
 
   pg:
     github: will/crystal-pg

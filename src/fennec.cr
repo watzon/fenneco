@@ -47,4 +47,6 @@ class Fennec < Proton::Client
 end
 
 client = Fennec.new(Proton::TerminalAuthFlow.new(encryption_key: ""))
-client.start
+client.start do |update|
+  spawn client.persistence_listener(update)
+end

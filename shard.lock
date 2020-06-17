@@ -1,5 +1,13 @@
 version: 2.0
 shards:
+  bindata:
+    git: https://github.com/spider-gazelle/bindata.git
+    version: 1.5.4
+
+  connect-proxy:
+    git: https://github.com/spider-gazelle/connect-proxy.git
+    version: 1.0.0
+
   crecto:
     git: https://github.com/watzon/crecto.git
     version: 0.11.2+git.commit.fa7658c2921b48073c9225ec6d6abca2b2edb89d
@@ -11,6 +19,10 @@ shards:
   dotenv:
     git: https://github.com/gdotdesign/cr-dotenv.git
     version: 0.7.0
+
+  google:
+    git: https://github.com/watzon/google.git
+    version: 2.1.0+git.commit.8263ecfb8969f30254036e1ea210a61094bb0d86
 
   humanize_time:
     git: https://github.com/mamantoha/humanize_time.git
@@ -28,6 +40,10 @@ shards:
     git: https://github.com/crystal-community/icr.git
     version: 0.7.0+git.commit.7da354f5c0a356aee77e68fc63c87e2ad35da7fb
 
+  jwt:
+    git: https://github.com/crystal-community/jwt.git
+    version: 1.4.2
+
   magic:
     git: https://github.com/dscottboggs/magic.cr.git
     version: 1.1.0+git.commit.bfa4998d957695b626d4f65475de910d9f18a66d
@@ -39,6 +55,10 @@ shards:
   micrate:
     git: https://github.com/juanedi/micrate.git
     version: 0.8.0+git.commit.3deb8eb10551d1cbc6b7808b6f57c289fb9380f6
+
+  openssl_ext:
+    git: https://github.com/stakach/openssl_ext.git
+    version: 1.2.1
 
   pg:
     git: https://github.com/will/crystal-pg.git

@@ -3,7 +3,6 @@ class Fennec < Proton::Client
     description: "Persists users and chats to the database. This is for " \
                  "gbans and yet to be created functions."
   )]
-  @[On(:raw)]
   def persistence_listener(update)
     case update
     when TL::UpdateNewMessage, TL::UpdateMessageSendSucceeded

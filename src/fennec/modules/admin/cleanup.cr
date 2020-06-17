@@ -32,6 +32,8 @@ class Fennec < Proton::Client
     unless silent
       edit_message(msg, response.to_s)
     end
+
+    Utils.log(response.to_s, "cleanup")
   end
 
   private def cleanup_chat(ctx, chat, count, silent)
@@ -73,13 +75,12 @@ class Fennec < Proton::Client
         end
         spawn edit_message(msg, progress.to_s)
       end
-
-      sleep 1
     end
 
     Proton::Utils::MarkdownBuilder.build do
       section do
         bold("Cleanup")
+        key_value_item(bold("Chat"), code(chat.id!))
         key_value_item(deleted_accounts_label, deleted_users)
       end
     end

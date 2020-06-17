@@ -11,12 +11,13 @@ class Fennec < Proton::Client
   @[Command(".stats")]
   def stats_command(ctx)
     msg = ctx.message
-    delete_message(msg)
+    edit_message(msg, "`Gathering stats...`")
 
     user_count = Repo.aggregate(Models::User, :count, :id)
     chat_count = Repo.aggregate(Models::Chat, :count, :id)
     gbanned_users = Repo.aggregate(Models::Gban, :count, :id)
 
+    invite_link = ENV["LOG_CHAT_INVITE_LINK"]?
     module_count = Dir.glob("src/fennec/modules/**/*.cr").size
     uptime = HumanizeTime.distance_of_time_in_words(BOT_START_TIME, Time.utc)
 
@@ -26,6 +27,7 @@ class Fennec < Proton::Client
         key_value_item("version", code(Fennec::VERSION))
         key_value_item("git hash", code(`git rev-parse --short HEAD`.strip))
         key_value_item("repo url", link("watzon/fenneco", FENNECO_GH_URL))
+        key_value_item("log chat", link("follow", invite_link)) if invite_link
         key_value_item("uptime", code(uptime))
         key_value_item("loaded modules", code(module_count))
         sub_section do
@@ -37,6 +39,7 @@ class Fennec < Proton::Client
       end
     end
 
+    delete_message(msg)
     send_message(msg.chat_id!, response.to_s, file: "assets/fenneco.png", reply_message: ctx.message.reply_message)
   end
 end
