@@ -22,8 +22,8 @@ class Fenneco < Proton::Client
   def initialize(auth_flow : Proton::AuthFlow)
     super(
       auth_flow: auth_flow,
-      api_id: ENV.fetch("TD_API_ID").to_i,
-      api_hash: ENV.fetch("TD_API_HASH"),
+      api_id: ENV.fetch("API_ID").to_i,
+      api_hash: ENV.fetch("API_HASH"),
       timeout: ENV.fetch("TD_REQUEST_TIMEOUT", "3600").to_i.seconds,
       use_test_dc: !!ENV.fetch("TD_USE_TEST_DC", "false").match(/1|t(rue)?/i),
       database_directory: ENV.fetch("TD_DATABASE_DIRECTORY", Path.home.join(".config/fenneco/tdlib").to_s),
