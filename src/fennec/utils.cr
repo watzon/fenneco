@@ -73,7 +73,8 @@ class Fennec < Proton::Client
     end
 
     def paste(text)
-      response = HTTP::Client.post("https://del.dog/documents", body: text)
+      headers = HTTP::Headers{ "X-Api-Key" => ENV["DOGBIN_API_KEY"] } if ENV["DOGBIN_API_KEY"]?
+      response = HTTP::Client.post("https://del.dog/documents", headers: headers, body: text)
       if response.status_code < 300
         json = JSON.parse(response.body)
         return "https://del.dog/#{json["key"].as_s}"

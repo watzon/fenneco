@@ -2,7 +2,7 @@ class Fennec < Proton::Client
   @[Command(".transcript")]
   def transcript_command(ctx)
     msg = ctx.message
-    args, text = ArgParser({start: Bool, stop: Bool, save: Bool}).new(ctx.text)
+    args, text = ArgParser({start: Bool, stop: Bool, save: Bool}).parse(ctx.text)
 
     unless args[:start] || args[:stop] || args[:save]
       return edit_message(msg, "`Please use either .start, .stop, or .save`")

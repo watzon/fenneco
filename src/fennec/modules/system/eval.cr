@@ -11,21 +11,17 @@ class Fennec < Proton::Client
     },
     usage: ".eval [args] <code>"
   )]
-  @[Command(".eval")]
+  @[Command([".eval", ".exec"])]
   def eval_command(ctx)
     msg = ctx.message
-    args, text = Utils.parse_args(ctx.text)
-    debug = args["debug"]? ? true : false
+    text = ctx.text.to_s
 
     @@icr_command_stack ||= Icr::CommandStack.new
-    @@icr_executor ||= Icr::Executer.new(self.class.icr_command_stack, debug)
-    self.class.icr_executor.debug = debug
+    @@icr_executor ||= Icr::Executer.new(self.class.icr_command_stack, false)
 
-    if args["reset"]?
+    if text.strip.starts_with?("reset")
       self.class.icr_command_stack.clear
-      if text.strip.empty?
-        return edit_message(msg, "`Crystal execution history reset!`")
-      end
+      return edit_message(msg, "`Crystal execution history reset!`")
     end
 
     edit_message(msg, "`Evaluating Crystal...`")
@@ -35,25 +31,48 @@ class Fennec < Proton::Client
 
     elapsed = Time.measure do
       result = check_crystal_syntax(command)
-      output, value, error = process_crystal_execution_result(result, command)
+      begin
+        output, value, error = process_crystal_execution_result(result, command)
+      rescue ex
+        output, value, error = ex.message.to_s, "", true
+      end
     end
 
-    response = String.build do |str|
-      str.puts "*Input (crystal)*"
-      str.puts "```"
-      str.puts command
-      str.puts "```"
-      str.puts "*Result*"
-      str.puts "```"
-      str.puts value.empty? ? "[no result]" : value
-      str.puts "```"
-      str.puts "*Output*"
-      str.puts "```"
-      str.puts output.to_s.empty? ? "[no output]" : output
-      str.puts "```"
+    if !value.empty? && value.size > 2000
+      value_link = Utils.paste(value)
     end
 
-    edit_message(msg, response)
+    if output && !output.empty? && output.size > 2000
+      output_link = Utils.paste(output)
+    end
+
+    response = Utils::MarkdownBuilder.build do
+      section(indent: 0) do
+        bold("Input (crystal)")
+        pre(command, language: "crystal")
+        if error
+          bold("Error")
+          pre(output.to_s)
+        else
+          bold("Result")
+          if value_link
+            link("paste bin link", value_link)
+            text("\n")
+          else
+            pre(value.empty? ? "[no result]" : value)
+          end
+
+          bold("Output")
+          if output_link
+            link("paste bin link", output_link)
+          else
+            pre(output.to_s.empty? ? "[no output]" : output)
+          end
+        end
+      end
+    end
+
+    edit_message(msg, response.to_s)
   end
 
   private def process_crystal_execution_result(result, command)

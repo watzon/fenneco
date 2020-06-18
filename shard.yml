@@ -10,9 +10,9 @@ targets:
 
 dependencies:
   proton:
-    # github: protoncr/proton
-    # branch: master
-    path: ../proton
+    github: protoncr/proton
+    branch: master
+    # path: ../proton
   dotenv:
     github: gdotdesign/cr-dotenv
     version: ~> 0.7.0

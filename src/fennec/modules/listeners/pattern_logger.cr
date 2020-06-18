@@ -7,12 +7,12 @@ class Fennec < Proton::Client
     if (text = ctx.text)
       if match = text.match(Utils::BOT_TOKEN_RE)
         # We found a bot token! Lol
-        log_pattern("Bot Token", match[1], ctx.message)
+        log_pattern("Bot Token", Utils.escape_md(match[1]), ctx.message)
       end
 
       if match = text.match(Utils::INVITE_LINK_RE)
         # Some shitty invite link
-        log_pattern("Invite Link", match[1], ctx.message)
+        log_pattern("Invite Link", Utils.escape_md(match[1]), ctx.message)
       end
     end
   end

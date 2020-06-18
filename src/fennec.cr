@@ -24,7 +24,6 @@ class Fennec < Proton::Client
       auth_flow: auth_flow,
       api_id: ENV.fetch("API_ID").to_i,
       api_hash: ENV.fetch("API_HASH"),
-      verbosity_level: ENV.fetch("VERBOSITY_LEVEL", "1").to_i,
       timeout: ENV.fetch("REQUEST_TIMEOUT", "3600").to_i.seconds,
       use_test_dc: !!ENV.fetch("USE_TEST_DC", "false").match(/1|t(rue)?/i),
       database_directory: ENV.fetch("DATABASE_DIRECTORY", Path.home.join(".config/fennec/tdlib").to_s),
@@ -47,6 +46,7 @@ class Fennec < Proton::Client
 end
 
 client = Fennec.new(Proton::TerminalAuthFlow.new(encryption_key: ""))
+client.set_tdlib_verbosity(ENV.fetch("VERBOSITY_LEVEL", "1").to_i)
 client.start do |update|
   spawn client.persistence_listener(update)
 end
