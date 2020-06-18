@@ -10,7 +10,7 @@ shards:
 
   crecto:
     git: https://github.com/watzon/crecto.git
-    version: 0.11.2+git.commit.fa7658c2921b48073c9225ec6d6abca2b2edb89d
+    version: 0.11.2+git.commit.e047a169e074fac7208f9c2e58cd8cf54b4d1eae
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
@@ -22,7 +22,7 @@ shards:
 
   google:
     git: https://github.com/watzon/google.git
-    version: 2.1.0+git.commit.8263ecfb8969f30254036e1ea210a61094bb0d86
+    version: 2.1.0+git.commit.8d5716d16cb26f07cc9922fa3120628717d82452
 
   humanize_time:
     git: https://github.com/mamantoha/humanize_time.git
@@ -65,8 +65,8 @@ shards:
     version: 0.21.1
 
   proton:
-    path: ../proton
-    version: 0.1.0
+    git: https://github.com/protoncr/proton.git
+    version: 0.1.0+git.commit.a5e3cbb41f287d6bd947a99c8385d5e8a02bef9a
 
   readline:
     git: https://github.com/crystal-lang/crystal-readline.git

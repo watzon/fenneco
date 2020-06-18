@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-describe Fennec do
+describe Fenneco do
   # TODO: Write tests
 
   it "works" do
