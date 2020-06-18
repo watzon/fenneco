@@ -28,6 +28,8 @@ You will also need a postgresql database.
 
 5. Finally it's time to run fenneco. Use the command `crystal run ./src/fenneco.cr`. If everything was done correctly you should see some connection stats (output by tdlib) and it should ask for your phone number. You should only need to do this once (unless you change the `TD_DATABASE_DIRECTORY` value).
 
+That should be about it. Go to Telegram, enter `.stats`, press enter, and you should see some statistics about your bot. If you want to enable multithreading (which is advised) run `crystal run` with the `-Dpreview_mt` flag.
+
 ## Extras
 
 There are some extra values that can be provided inside of your `.env` file, but aren't required. Here they are:
